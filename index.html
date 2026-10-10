@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lernen</title>
+<style>
+:root{--bg:#f4f2ec;--ink:#1c2a2e;--mut:#5b6b6e;--card:#fff;--line:#d8d5cb;--a:#1b7f72;--b:#2b59c3}
+@media (prefers-color-scheme:dark){:root{--bg:#12191c;--ink:#e8eef0;--mut:#9db0b4;--card:#1b2529;--line:#2c3a40;--a:#4cc3b1;--b:#7aa2ff}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px 16px}
+main{max-width:520px;margin:0 auto}
+h1{font-size:2rem;margin:8px 0 4px}
+p.sub{margin:0 0 24px;color:var(--mut)}
+a.tile{display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;background:var(--card);border:2px solid var(--line);border-left:8px solid var(--c);border-radius:18px;padding:20px 18px;margin-bottom:14px;min-height:88px}
+a.tile:active{transform:translateY(1px)}
+a.tile:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.e{font-size:2.4rem;line-height:1}
+.t{font-weight:800;font-size:1.3rem}
+.d{color:var(--mut);font-size:.95rem}
+</style>
+</head>
+<body>
+<main>
+  <h1>Lernen 📚</h1>
+  <p class="sub">Tippe auf ein Fach.</p>
+  <a class="tile" style="--c:var(--a)" href="latein.html"><span class="e">🏛️</span><span><span class="t">Latein</span><br><span class="d">Vokabeln üben mit Quiz und Monstern</span></span></a>
+  <a class="tile" style="--c:var(--b)" href="geschichte.html"><span class="e">🌾</span><span><span class="t">Geschichte</span><br><span class="d">Jungsteinzeit, Karten und Quiz</span></span></a>
+</main>
+</body>
+</html>

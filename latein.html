@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Monstra Latina Klasse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+/* Layout: one narrow column, chunky cards, bottom tab bar. Latin words are the biggest thing on every screen. */
+:root{
+  --bg:#EEF3EE; --surface:#FFFFFF; --ink:#14262A; --muted:#55696C; --line:#D3DDD6; --soft:#E2EAE4;
+  --accent:#1B7F72; --accent-ink:#FFFFFF; --gold:#E3A71A;
+  --good:#2B9A5A; --good-bg:#DCF2E4; --bad:#D5433B; --bad-bg:#FBE1DE;
+  --shadow:0 2px 0 rgba(20,38,42,.10);
+  --fd:'Lilita One','Arial Rounded MT Bold','Trebuchet MS',system-ui,sans-serif;
+  --fb:'Nunito',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1A1C; --surface:#172427; --ink:#E7F0EC; --muted:#93A6A6; --line:#2A3B3E; --soft:#1F3033;
+    --accent:#45C4AA; --accent-ink:#06201B; --gold:#F1BE3B;
+    --good:#4CC47F; --good-bg:#173A29; --bad:#F06A60; --bad-bg:#43201E;
+    --shadow:0 2px 0 rgba(0,0,0,.35); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1A1C; --surface:#172427; --ink:#E7F0EC; --muted:#93A6A6; --line:#2A3B3E; --soft:#1F3033;
+  --accent:#45C4AA; --accent-ink:#06201B; --gold:#F1BE3B;
+  --good:#4CC47F; --good-bg:#173A29; --bad:#F06A60; --bad-bg:#43201E;
+  --shadow:0 2px 0 rgba(0,0,0,.35); color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:16px;line-height:1.45;padding-inline:16px;padding-block:12px 100px}
+*{box-sizing:border-box}
+h2{font-family:var(--fd);font-weight:400;font-size:22px;letter-spacing:.02em;margin:22px 0 4px}
+p{margin:0 0 10px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.muted{color:var(--muted)} .small{font-size:14px}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+.brand{font-family:var(--fd);font-size:24px;letter-spacing:.02em}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.chip{background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:3px 10px;font-weight:800;font-size:14px;white-space:nowrap}
+
+.hero{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
+.rankrow{display:flex;align-items:center;gap:14px}
+.rk{font-size:44px;line-height:1}
+.rkn{font-family:var(--fd);font-size:30px;line-height:1.1}
+.xpbar,.bar,.hpbar{height:12px;border-radius:999px;background:var(--soft);overflow:hidden}
+.xpbar i,.bar i{display:block;height:100%;background:var(--gold);border-radius:999px;min-width:6px}
+.bar{height:8px}.bar i{background:var(--accent)}
+.hpbar i{display:block;height:100%;background:var(--bad);border-radius:999px;transition:width .4s}
+
+.btn{border:0;border-radius:14px;padding:12px 18px;background:var(--accent);color:var(--accent-ink);font-weight:800;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.btn.sec{background:var(--soft);color:var(--ink);box-shadow:0 3px 0 var(--line)}
+.btn.ghost{background:transparent;border:2px solid var(--line);box-shadow:none;color:var(--ink)}
+.btn.sm{padding:8px 12px;font-size:14px;border-radius:12px}
+.btn.big{padding:16px 18px;font-size:19px;font-family:var(--fd);font-weight:400;letter-spacing:.03em}
+.btn.yes{background:var(--good-bg);border:2px solid var(--good);color:var(--ink);box-shadow:none}
+.btn.no{background:var(--bad-bg);border:2px solid var(--bad);color:var(--ink);box-shadow:none}
+.actions,.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.leks{display:flex;flex-direction:column;gap:10px}
+.lek{display:flex;align-items:center;gap:8px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:8px 10px;min-width:0}
+.lek.on{border-color:var(--accent)}
+.lek-main{display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:pointer}
+.lek-main input{position:absolute;opacity:0;width:1px;height:1px}
+.lek-main input:focus-visible + .mon{outline:3px solid var(--gold);outline-offset:2px;border-radius:12px}
+.mon{flex:none;display:block;line-height:0}
+.lek:not(.on) .mon{opacity:.45}
+.lek-txt{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.lek-txt b{font-family:var(--fd);font-weight:400;font-size:18px;letter-spacing:.02em;overflow-wrap:anywhere}
+.lek-txt span,.lek-txt small{overflow-wrap:anywhere}
+.lek-txt small{color:var(--muted)}
+.rowbtns{display:flex;flex-direction:column;gap:6px}
+.foot{color:var(--muted);font-size:13px;margin-top:8px}
+
+.flip{perspective:1200px;cursor:pointer}
+.inner{display:grid;transition:transform .5s;transform-style:preserve-3d}
+.flip.is-flipped .inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:22px 16px;min-height:310px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;box-shadow:var(--shadow);min-width:0}
+.face.back{transform:rotateY(180deg)}
+.emoji{font-size:56px;line-height:1}.emoji.xl{font-size:92px}.emoji.sm{font-size:32px}
+.latin{font-family:var(--fd);font-size:clamp(34px,11vw,50px);line-height:1.05;letter-spacing:.02em;overflow-wrap:anywhere}
+.german{font-family:var(--fd);font-size:clamp(28px,8vw,38px);line-height:1.15;overflow-wrap:anywhere}
+.hook{background:var(--soft);border-radius:12px;padding:8px 12px;font-size:15px;max-width:100%;overflow-wrap:anywhere}
+.mine{width:100%;max-width:340px;font:inherit;font-size:15px;border:2px dashed var(--line);border-radius:12px;padding:8px 12px;background:var(--bg);color:var(--ink)}
+.ctl{display:flex;flex-direction:column;gap:10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--soft);padding:4px;border-radius:14px}
+.seg button{border:0;border-radius:10px;padding:8px;font-weight:800;background:transparent;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);box-shadow:var(--shadow)}
+.counter{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800}
+
+.prog{display:flex;gap:4px;flex:1;min-width:0}
+.prog i{flex:1;height:10px;border-radius:5px;background:var(--soft);min-width:0}
+.prog i.g{background:var(--good)}.prog i.b{background:var(--bad)}.prog i.c{background:var(--gold)}
+.qcard{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;box-shadow:var(--shadow);min-height:170px;justify-content:center}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;font-weight:700;font-size:17px;padding:14px;border:2px solid var(--line);border-radius:16px;background:var(--surface);color:var(--ink);cursor:pointer;box-shadow:var(--shadow);width:100%;min-width:0;overflow-wrap:anywhere}
+.opt:disabled{cursor:default;opacity:1;color:var(--ink)}
+.opt.good{border-color:var(--good);background:var(--good-bg)}
+.opt.bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt .k{flex:none;width:26px;height:26px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-size:13px;font-weight:800}
+.fb{border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:8px;border:2px solid var(--line);animation:pop .25s}
+.fb.ok{background:var(--good-bg);border-color:var(--good)}
+.fb.no{background:var(--bad-bg);border-color:var(--bad)}
+.fbh{font-family:var(--fd);font-size:22px;letter-spacing:.02em}
+.fbw{font-size:18px}
+.boss{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:8px 12px}
+.bi{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+.bi b{font-family:var(--fd);font-weight:400;font-size:20px}
+.lives{font-size:18px;letter-spacing:2px}
+@keyframes pop{0%{transform:scale(.97)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+.card{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
+.center{align-items:center;text-align:center}
+.bigscore{font-family:var(--fd);font-size:56px;line-height:1}
+.grid{font-size:26px;letter-spacing:2px;line-height:1.2;overflow-wrap:anywhere}
+.up{background:var(--gold);color:#2b1d00;border-radius:14px;padding:8px 14px;font-weight:800}
+.share{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font-family:var(--fb);text-align:left;width:100%}
+.note{background:var(--soft);border:2px solid var(--gold);border-radius:14px;padding:10px 12px;font-weight:700}
+.err{color:var(--bad);font-weight:800;margin:0}
+
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tile{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.tile b{font-family:var(--fd);font-weight:400;font-size:20px;letter-spacing:.02em;overflow-wrap:anywhere}
+.tile.locked{opacity:.6}
+.words{display:flex;flex-wrap:wrap;gap:6px}
+.word{background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:4px 10px;font-size:14px;font-weight:700}
+.field{display:flex;flex-direction:column;gap:4px;font-weight:800;font-size:14px}
+.field input,.field textarea{font:inherit;font-weight:600;border:2px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--ink);width:100%}
+.field textarea{resize:vertical;min-height:200px}
+
+.tin{width:100%;font:inherit;font-size:1.25rem;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:inherit;box-sizing:border-box;margin:4px 0 12px}.tin:focus{outline:3px solid var(--accent);outline-offset:1px}.tin.ok{border-color:var(--good)}.tin.no{border-color:var(--bad)}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:2px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.navin{max-width:560px;margin:0 auto;display:flex;gap:4px}
+.navin button{flex:1;min-width:0;border:0;background:transparent;border-radius:12px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;color:var(--muted);font-weight:800;font-size:11px}
+.navin button span:first-child{font-size:22px;line-height:1.1}
+.navin button[aria-current="page"]{background:var(--soft);color:var(--ink)}
+
+@media (min-width:480px){.opts{grid-template-columns:1fr 1fr}}
+@media (prefers-reduced-motion:reduce){.inner{transition:none}.fb{animation:none}.hpbar i{transition:none}}
+</style>
+<div id="app"></div>
+<script>
+(function(){
+'use strict';
+var KEY='monstra-latina-klasse-v1';
+
+/* Sechs Monster-Designs, jede Liste bekommt eins */
+var MONS=[
+ {c:'#4CB782',c2:'#BFEAD2',name:'Villo',eyes:2,horn:'cone'},
+ {c:'#F29A4A',c2:'#FBD9B4',name:'Ridiculus',eyes:1,horn:'curl'},
+ {c:'#43A6D8',c2:'#C4E6F6',name:'Dolorus',eyes:3,horn:'spikes'},
+ {c:'#E9648F',c2:'#F8C9D9',name:'Gaudius',eyes:2,horn:'cone'},
+ {c:'#A98BE8',c2:'#DDD0F8',name:'Spectrus',eyes:2,horn:'spikes'},
+ {c:'#2FB9B3',c2:'#BDEBE8',name:'Ventulus',eyes:1,horn:'cone'}
+];
+var STAGES=['Ei','Baby','Jugendlich','Ausgewachsen'];
+var RANKS=[{n:'Gladiator',e:'⚔️',x:0},{n:'Legionär',e:'🛡️',x:200},{n:'Centurio',e:'🦅',x:500},{n:'Konsul',e:'🏛️',x:1000},{n:'Caesar',e:'👑',x:2000}];
+
+/* Bilder-Lexikon: nur lateinisches Wort, Bild und Eselsbrücke. Keine Bedeutungen, keine Listen. */
+var LEX={"via": ["🛣️", "Wie in „via Innsbruck“: über diesen Weg. Auch: Viadukt."], "serva": ["👩‍🌾", "Die weibliche Form von servus."], "servus": ["🧑‍🌾", "Bayerisch „Servus!“ hieß ursprünglich „zu Diensten“."], "silva": ["🌲", "Transsilvanien = „Land jenseits der Wälder“, Draculas Heimat 🧛"], "villa": ["🏡", "Villa: fast dasselbe Wort."], "familia": ["👨‍👩‍👧‍👦", "Familie: kaum zu übersehen."], "puella": ["👧", "Klingt ein bisschen wie Püppchen."], "murus": ["🧱", "Das deutsche Wort Mauer stammt von murus."], "vicus": ["🏘️", "Orte wie Norwich oder Ipswich enden auf -wich: „Dorf“."], "avus": ["👴", ""], "campus": ["🌾", "Camping, kampieren, Kampf: alles Verwandte von campus. Englisch camp = Lager."], "equus": ["🐴", "Equestrian (englisch) = Reiter-."], "et": ["➕", "Et cetera = und so weiter."], "esse": ["🧍", "Essenz: das Wesen, das „Sein“ einer Sache."], "ridere": ["😂", "Ridikül = lächerlich. Italienisch: ridere."], "tacere": ["🤐", "In Noten heißt „tacet“: Pause, diese Stimme schweigt."], "monere": ["☝️", "Monitor = Aufpasser. Auch: Mahnung."], "parere": ["🙇", "Ein Hund „pariert“: er gehorcht."], "debere": ["📌", "Debet = Soll: das, was man schuldet."], "timere": ["😨", "Timid (englisch) = ängstlich."], "dolere": ["🤕", "Kondolieren = mit jemandem leiden."], "amica": ["👭", "Spanisch amiga, französisch amie."], "oculus": ["👁️", "Okular beim Mikroskop: da schaut das Auge rein."], "cur": ["❓", ""], "quid": ["🤔", ""], "non": ["🚫", "Englisch no, französisch und italienisch non."], "nunc": ["⏰", "nunc klingt wie „nun“."], "dominus": ["🤴", "Dominieren = herrschen."], "ibi": ["📍", ""], "hic": ["👇", "hic klingt wie „hier“."], "sedere": ["🪑", "Englisch to sit, italienisch sedere."], "respondere": ["💬", "Korrespondenz, Response."], "augere": ["📈", "Auktion = Steigerung."], "tamen": ["🤷", ""], "adhuc": ["🕰️", ""], "neque": ["🙅", ""], "neque … neque": ["⛔", ""], "nam": ["🔗", ""], "sed": ["↔️", ""], "quis": ["🕵️", "Quiz fragt auch nach dem „wer“ und „was“."], "docere": ["👩‍🏫", "Dozent, dozieren."], "lingua": ["👅", "Englisch language, französisch langue, spanisch lengua."], "gaudere": ["🥳", "Bayerisch „a Mordsgaudi“: großer Spaß."], "amicus": ["🤝", "Spanisch amigo, italienisch amico."], "bene": ["👍", "Spanisch und französisch bien, italienisch bene."], "studere": ["📚", "Student; englisch to study."], "tabula": ["📋", "Tabelle; englisch table, italienisch tavola."], "tenere": ["✊", "Tennis: französisch „tenez!“ = „haltet!“, aus tenere."], "praebere": ["🤲", ""], "iam": ["⌛", ""], "primo": ["🥇", "Primus, primär."], "tum": ["➡️", ""], "recte": ["✅", "Verwandt mit korrekt."], "non iam": ["🔚", ""], "saepe": ["🔁", ""], "numquam": ["⛔", "Spanisch nunca."], "sic": ["👉", "„sic!“ in Texten = so steht es wirklich da."], "semper": ["♾️", ""], "sonus": ["🔊", "Sonate, Resonanz."], "terrere": ["😱", "Terror, Terrorist."], "latere": ["🙈", "latent = verborgen, unter der Oberfläche."], "subito": ["⚡", "In der Musik: subito = plötzlich."], "gladius": ["🗡️", "Gladiator; Gladiole, die „Schwertblume“."], "sceleratus": ["🦹", ""], "flere": ["😭", "Umgangssprachlich: flennen."], "placere": ["😍", "Placebo heißt „ich werde gefallen“."], "torquere": ["🌀", "Torsion; englisch torque = Drehmoment."], "tantum": ["🤏", "Steht hinter dem Wort, das es betont."], "cui": ["🎁", "Der Dativ antwortet auf „wem?“."], "statim": ["🚀", ""], "etiam": ["🙌", ""], "iterum": ["🔄", ""], "itaque": ["🧩", ""], "cibus": ["🍲", ""], "habere": ["🎒", "Englisch to have."], "aqua": ["💧", "Aquarium; italienisch acqua."], "complere": ["🥛", "komplett; englisch to complete."], "copia": ["📦", "Kopie, kopieren; englisch copy."], "ventus": ["🌬️", "Ventil, Ventilator."], "delere": ["💥", "Englisch delete: die Löschen-Taste."], "populus": ["👥", "populär; englisch people."], "aeolus": ["🌪️", "Die Äolsharfe wird vom Wind gespielt."], "deus": ["🙏", "Französisch dieu, italienisch dio, spanisch dios."], "natura": ["🌿", "Natur; englisch nature."], "fluvius": ["🏞️", ""], "profecto": ["💯", ""], "gratia": ["💐", "Grazie; italienisch grazie."], "gratiam habere": ["🤗", ""]};
+
+var DEMO=[['aqua','Wasser','💧'],['via','Weg, Straße'],['villa','Haus, Landhaus'],['familia','Familie'],['equus','Pferd'],['amicus','Freund'],['silva','Wald'],['murus','Mauer']];
+
+/* Zustand, nur auf diesem Gerät */
+function D(){return{v:1,xp:0,streak:0,last:'',box:{},seen:{},boss:{},hooks:{},name:'',sel:[],daily:{},lists:[],nid:1};}
+function load(){try{var r=JSON.parse(localStorage.getItem(KEY));return Object.assign(D(),r||{});}catch(e){return D();}}
+var st=load();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+
+var view='home',C=null,Q=null,E=null,resetStep=0,lastDir='ld',note='';
+var app=document.getElementById('app');
+
+/* Helfer */
+var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+var fmt=function(n){return n.toLocaleString('de-DE');};
+var pad=function(n){return String(n).padStart(2,'0');};
+function dayStr(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function today(){return dayStr(new Date());}
+function yest(){var d=new Date();d.setDate(d.getDate()-1);return dayStr(d);}
+function curStreak(){return (st.last===today()||st.last===yest())?st.streak:0;}
+function touchDay(){var t=today();if(st.last===t)return;st.streak=(st.last===yest())?st.streak+1:1;st.last=t;}
+function addXp(n){if(n<=0)return;touchDay();st.xp+=n;save();}
+function rank(){var i=0;RANKS.forEach(function(r,k){if(st.xp>=r.x)i=k;});return i;}
+
+/* Wörter aus den eigenen Listen */
+var W=[];
+function norm(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim();}
+function keyOf(lat){return norm(String(lat).split(',')[0]);}
+function guessPos(k){return /(ere|are|ire)$/.test(k)?'V':(k.indexOf(' ')>=0?'A':'N');}
+function buildW(){
+  var m={};W=[];
+  st.lists.forEach(function(li){li.words.forEach(function(a){
+    var k=keyOf(a[0]);if(!k)return;
+    var w=m[k];
+    if(!w){var lx=LEX[k];w=m[k]={id:k,lat:a[0],de:a[1],emo:a[2]||(lx?lx[0]:''),pos:guessPos(k),info:'',hook:lx?lx[1]:'',ls:[]};W.push(w);}
+    if(w.ls.indexOf(li.id)<0)w.ls.push(li.id);
+  });});
+}
+buildW();
+function byId(id){return W.filter(function(w){return w.id===id;})[0];}
+function bx(w){return st.box[w.id]||0;}
+function lekWords(l){return W.filter(function(w){return w.ls.indexOf(l)>=0;});}
+function selWords(){return W.filter(function(w){return w.ls.some(function(l){return st.sel.indexOf(l)>=0;});});}
+function listById(l){return st.lists.filter(function(x){return x.id===l;})[0];}
+function listIdx(l){for(var i=0;i<st.lists.length;i++)if(st.lists[i].id===l)return i;return -1;}
+function monFor(l){var i=listIdx(l);if(i<0)return null;var M=MONS[i%MONS.length];return{c:M.c,c2:M.c2,eyes:M.eyes,horn:M.horn,name:M.name+(i>=MONS.length?' '+(Math.floor(i/MONS.length)+1):'')};}
+function lekProg(l){var ws=lekWords(l),s=0,k=0;ws.forEach(function(w){s+=bx(w);if(bx(w)>=2)k++;});return{p:s/(3*Math.max(1,ws.length)),learned:k,n:ws.length};}
+function stageOf(p){return p<0.08?0:p<0.4?1:p<0.75?2:3;}
+function collTotal(){var t=0;st.lists.forEach(function(l){t+=stageOf(lekProg(l.id).p)+(st.boss[l.id]?1:0);});return t;}
+
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function hash(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function shuf(a,r){r=r||Math.random;var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(r()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function pickW(list,n,r){r=r||Math.random;var pool=list.slice(),out=[];while(out.length<n&&pool.length){var ws=pool.map(function(w){return [6,4,2,1][bx(w)];});var tot=ws.reduce(function(a,b){return a+b;},0);var x=r()*tot,k=0;for(;k<pool.length;k++){x-=ws[k];if(x<=0)break;}k=Math.min(k,pool.length-1);out.push(pool.splice(k,1)[0]);}return out;}
+
+/* Monster als SVG */
+function monSvg(l,stage,crown,px){
+  var M=monFor(l);px=px||88;var ink='var(--ink)',g='';
+  if(!M){return '<svg viewBox="0 0 120 120" width="'+px+'" height="'+px+'" aria-hidden="true"><ellipse cx="60" cy="68" rx="34" ry="42" fill="var(--soft)" stroke="'+ink+'" stroke-width="3" stroke-dasharray="6 5"/><text x="60" y="82" text-anchor="middle" font-size="38" font-weight="800" fill="var(--muted)">?</text></svg>';}
+  if(stage<=0){
+    g='<ellipse cx="60" cy="68" rx="34" ry="42" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3"/>'+
+      '<circle cx="48" cy="52" r="6" fill="'+M.c+'"/><circle cx="72" cy="80" r="8" fill="'+M.c+'"/><circle cx="66" cy="46" r="4" fill="'+M.c+'"/>'+
+      '<path d="M44 68 L52 60 L58 70 L66 60 L76 70" fill="none" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+  } else {
+    var s=[0,0.62,0.82,1][stage],o='';
+    if(stage>=3)o+='<polygon points="20,64 2,44 8,74" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/><polygon points="100,64 118,44 112,74" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+    if(stage>=2){
+      if(M.horn==='cone')o+='<polygon points="28,42 20,14 46,32" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/><polygon points="92,42 100,14 74,32" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+      else if(M.horn==='curl')o+='<path d="M40 32 C36 18 28 16 26 9" fill="none" stroke="'+ink+'" stroke-width="3" stroke-linecap="round"/><circle cx="26" cy="9" r="5" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3"/><path d="M80 32 C84 18 92 16 94 9" fill="none" stroke="'+ink+'" stroke-width="3" stroke-linecap="round"/><circle cx="94" cy="9" r="5" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3"/>';
+      else o+='<polygon points="36,34 42,14 50,28" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/><polygon points="54,26 60,8 66,26" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/><polygon points="70,28 78,14 84,34" fill="'+M.c2+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+    }
+    o+='<ellipse cx="42" cy="112" rx="13" ry="6" fill="'+M.c+'" stroke="'+ink+'" stroke-width="3"/><ellipse cx="78" cy="112" rx="13" ry="6" fill="'+M.c+'" stroke="'+ink+'" stroke-width="3"/>';
+    o+='<path d="M20 74 C20 38 42 24 60 24 C78 24 100 38 100 74 C100 98 84 112 60 112 C36 112 20 98 20 74Z" fill="'+M.c+'" stroke="'+ink+'" stroke-width="3"/>';
+    o+='<circle cx="32" cy="82" r="6" fill="'+M.c2+'"/><circle cx="88" cy="82" r="6" fill="'+M.c2+'"/>';
+    var Es=M.eyes===1?[[60,58,15]]:M.eyes===2?[[45,60,10],[75,60,10]]:[[60,46,9],[43,66,9],[77,66,9]];
+    Es.forEach(function(e){o+='<circle cx="'+e[0]+'" cy="'+e[1]+'" r="'+e[2]+'" fill="#fff" stroke="'+ink+'" stroke-width="2.5"/><circle cx="'+(e[0]+1.5)+'" cy="'+(e[1]+1.5)+'" r="'+(e[2]*0.45)+'" fill="#1b1b1b"/>';});
+    o+='<path d="M42 90 Q60 106 78 90 Q60 96 42 90Z" fill="#5a1a24" stroke="'+ink+'" stroke-width="2.5" stroke-linejoin="round"/><polygon points="48,93 52,100 56,95" fill="#fff"/><polygon points="64,95 68,100 72,93" fill="#fff"/>';
+    if(crown)o+='<polygon points="42,28 44,10 52,19 60,6 68,19 76,10 78,28" fill="var(--gold)" stroke="'+ink+'" stroke-width="2.5" stroke-linejoin="round"/>';
+    g='<g transform="translate(60 114) scale('+s+') translate(-60 -114)">'+o+'</g>';
+  }
+  return '<svg viewBox="0 0 120 120" width="'+px+'" height="'+px+'" aria-hidden="true">'+g+'</svg>';
+}
+
+/* Fragen */
+function mkQ(w,type,r,pool){
+  pool=pool||W;
+  var cand=shuf(pool.filter(function(o){return o.id!==w.id&&o.pos===w.pos;}),r).concat(shuf(pool.filter(function(o){return o.id!==w.id&&o.pos!==w.pos;}),r));
+  var key=(type==='dl'||type==='pl')?'lat':'de';
+  var opts=[w],seen={};seen[w[key]]=1;
+  for(var i=0;i<cand.length&&opts.length<4;i++){var o=cand[i];if(seen[o[key]])continue;seen[o[key]]=1;opts.push(o);}
+  return{w:w,type:type,opts:shuf(opts,r)};
+}
+function pickType(w,r){r=r||Math.random;var ts=w.emo?['ld','dl','pl']:['ld','dl'];return ts[Math.floor(r()*ts.length)];}
+function newQ(mode,words,l,r,pool){Q={mode:mode,l:l||0,qs:words.map(function(w){return mkQ(w,pickType(w,r),r,pool);}),i:0,res:[],streak:0,lives:3,xp:0,ans:null,msg:'',gain:0,final:null,rank0:rank(),typed:''};if(mode==='type')Q.qs.forEach(function(q){q.type=Math.random()<0.6?'dlt':'ldt';});view='quiz';go();}
+function dailyBlocked(){return Q&&!Q.final&&Q.mode==='daily';}
+function toHome(msg){note=msg;go('home');}
+function startQuiz(){
+  if(dailyBlocked()){go('quiz');return;}
+  var ws=selWords();
+  if(ws.length<4){toHome(st.lists.length?'Wähle Listen mit zusammen mindestens 4 Wörtern aus.':'Lege zuerst eine Liste mit mindestens 4 Wörtern an.');return;}
+  newQ('quiz',pickW(ws,Math.min(10,ws.length)));
+}
+function startBoss(l){
+  if(dailyBlocked()){go('quiz');return;}
+  var ws=lekWords(l);
+  if(ws.length<4){toHome('Für den Boss braucht eine Liste mindestens 4 Wörter.');return;}
+  newQ('boss',shuf(ws).slice(0,10),l);
+}
+function startDaily(){
+  var pool=W.slice().sort(function(a,b){return a.id<b.id?-1:1;});
+  if(pool.length<4){toHome('Für das Tagesrätsel brauchst du mindestens 4 Wörter.');return;}
+  var r=mulberry(hash('monstra-'+today()));
+  newQ('daily',shuf(pool,r).slice(0,Math.min(10,pool.length)),0,r,pool);
+}
+/* Tippen: ohne Bild, ohne Auswahl */
+function nz(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ß/g,'ss').replace(/\s+/g,' ').trim();}
+function lev(a,b){var m=a.length,n=b.length,d=[],i,j;for(i=0;i<=m;i++)d[i]=[i];for(j=1;j<=n;j++)d[0][j]=j;for(i=1;i<=m;i++)for(j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1));return d[m][n];}
+function noArt(t){return t.replace(/^(der|die|das|ein|eine|zu|sich)\s+/,'');}
+function dParts(de){var base=String(de).replace(/\([^)]*\)/g,' '),out=[];base.split(/[,;]/).forEach(function(p){var t=nz(p);if(t){out.push(t);out.push(noArt(t));}});var f=nz(base);if(f)out.push(f);return out.filter(Boolean);}
+function checkTyped(q,val){
+  var w=q.w,t=nz(val);
+  if(q.type==='dlt'){var a=nz(w.lat),b=nz(String(w.lat).split(',')[0]);return{ok:t===a||t===b,near:false};}
+  var tt=noArt(t),ps=dParts(w.de),i;
+  for(i=0;i<ps.length;i++)if(t===ps[i]||tt===ps[i])return{ok:true,near:false};
+  for(i=0;i<ps.length;i++)if(ps[i].length>=5&&lev(tt,ps[i])<=1)return{ok:true,near:true};
+  return{ok:false,near:false};
+}
+function typeAnswer(skip){
+  if(!Q||Q.mode!=='type'||Q.ans!=null)return;
+  var el=document.getElementById('tans'),val=el?el.value:(Q.typed||'');
+  if(!skip&&!val.trim())return;
+  var q=Q.qs[Q.i],w=q.w,r=skip?{ok:false,near:false}:checkTyped(q,val),b=bx(w),g=0;
+  Q.typed=skip?'':val.trim();Q.ans=1;Q.tok=r.ok;Q.near=r.near;
+  st.seen[w.id]=1;st.box[w.id]=r.ok?Math.min(3,b+1):0;
+  if(r.ok){Q.streak++;g=15;if(Q.streak%5===0)g+=5;Q.msg=r.near?'Fast: nur ein kleiner Tippfehler':['Richtig!','Stark!','Genau!','Sitzt!'][Math.floor(Math.random()*4)];}
+  else{Q.streak=0;Q.msg=skip?'Nicht schlimm!':'Fast!';}
+  Q.res.push(r.ok);Q.gain=g;Q.xp+=g;addXp(g);save();render();
+  var nb=document.getElementById('nextbtn');if(nb)nb.focus();
+}
+function typeV(){
+  var q=Q.qs[Q.i],w=q.w,done=Q.ans!=null,last=Q.i>=Q.qs.length-1,dl=q.type==='dlt';
+  var dots=Q.qs.map(function(_,i){var c=i<Q.res.length?(Q.res[i]?'g':'b'):(i===Q.i?'c':'');return '<i class="'+c+'"></i>';}).join('');
+  var head='<div class="counter"><div class="prog" aria-label="Fortschritt">'+dots+'</div><button class="btn sm ghost" data-a="quit">✕</button></div>';
+  var lab=dl?'Wie heißt das auf Latein? Tippe das Wort.':'Was heißt das auf Deutsch? Eine Bedeutung genügt.';
+  var prompt=dl?'<div class="german">'+esc(w.de)+'</div>':'<div class="latin">'+esc(w.lat)+'</div>';
+  var cls='tin'+(done?(Q.tok?' ok':' no'):'');
+  var inp='<input class="'+cls+'" id="tans" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="Hier tippen …" aria-label="Deine Antwort" value="'+esc(Q.typed||'')+'"'+(done?' disabled':'')+'>';
+  var btns=done?'':'<div class="two"><button class="btn sec" data-a="tskip">Weiß ich nicht</button><button class="btn" data-a="tcheck">Prüfen</button></div>';
+  var fb='';
+  if(done){fb='<div class="fb '+(Q.tok?'ok':'no')+'" aria-live="polite"><div class="fbh">'+esc(Q.msg)+(Q.gain?' +'+Q.gain+' XP':'')+'</div><div class="fbw"><span class="emoji sm">'+(w.emo||'📝')+'</span> <b>'+esc(w.lat)+'</b> = '+esc(w.de)+'</div>'+(w.info?'<div class="muted small">'+esc(w.info)+'</div>':'')+(w.hook?'<div class="hook">💡 '+esc(w.hook)+'</div>':'')+'<button class="btn" id="nextbtn" data-a="next">'+(last?'Ergebnis':'Weiter')+'</button></div>';}
+  return head+'<div class="qcard"><div class="muted small">'+lab+'</div>'+prompt+'</div>'+inp+btns+fb;
+}
+
+
+function startType(){
+  if(dailyBlocked()){go('quiz');return;}
+  var ws=selWords();
+  if(!ws.length){if(typeof toHome==='function')toHome('Lege zuerst eine Liste an.');return;}
+  newQ('type',pickW(ws,Math.min(10,ws.length)));
+}
+
+function startCards(){
+  var ws=selWords();
+  if(!ws.length){toHome(st.lists.length?'Wähle mindestens eine Liste aus.':'Lege zuerst eine Liste an.');return;}
+  var deck=pickW(ws,Math.min(20,ws.length)).map(function(w){return w.id;});
+  C={deck:deck,i:0,flip:false,known:0,again:{},tot:deck.length,xp:0,dir:lastDir};view='cards';go();
+}
+
+function answer(idx){
+  if(!Q||Q.ans!=null)return;
+  var q=Q.qs[Q.i],ok=q.opts[idx].id===q.w.id,b=bx(q.w),g=0;
+  Q.ans=idx;st.seen[q.w.id]=1;st.box[q.w.id]=ok?Math.min(3,b+1):0;
+  if(ok){Q.streak++;if(Q.mode==='daily')g=5;else{g=10;if(Q.streak%5===0)g+=5;}Q.msg=['Richtig!','Stark!','Genau!','Sitzt!'][Math.floor(Math.random()*4)];}
+  else{Q.streak=0;Q.msg='Fast!';if(Q.mode==='boss')Q.lives--;}
+  Q.res.push(ok);Q.gain=g;Q.xp+=g;addXp(g);save();render();
+  var nb=document.getElementById('nextbtn');if(nb)nb.focus();
+}
+function nextQ(){
+  if(!Q||Q.ans==null)return;
+  var last=Q.i>=Q.qs.length-1,dead=Q.mode==='boss'&&Q.lives<=0;
+  if(last||dead){finish();}else{Q.i++;Q.ans=null;Q.msg='';Q.gain=0;Q.typed='';Q.tok=null;Q.near=false;}
+  render();window.scrollTo(0,0);
+}
+function finish(){
+  var n=Q.res.length,score=Q.res.filter(Boolean).length,bonus=0,win=false;
+  if(Q.mode==='boss'){win=Q.lives>0;if(win){bonus=st.boss[Q.l]?20:50;st.boss[Q.l]=true;}}
+  else if(Q.mode==='daily'){bonus=30;st.daily={date:today(),score:score,n:n,res:Q.res.slice()};}
+  else if(Q.mode==='type'){bonus=score===n?30:(score/n>=0.8?15:0);}
+  else{bonus=score===n?20:(score/n>=0.8?10:0);}
+  addXp(bonus);Q.xp+=bonus;Q.final={score:score,n:n,win:win,bonus:bonus};save();
+}
+
+/* Listen eingeben */
+function parseList(text){
+  var out=[],bad=0,seen={};
+  String(text).split(/\r?\n/).forEach(function(line){
+    line=line.trim();if(!line)return;
+    var parts=line.split(/\s*(?:=|\t|;)\s*/);
+    if(parts.length<2){var m=line.match(/^(.+?)\s+[-–—:]\s+(.+)$/);if(m)parts=[m[1],m[2]];}
+    var lat=(parts[0]||'').trim(),de=(parts[1]||'').trim(),emo=(parts[2]||'').trim();
+    if(parts.length<2||!lat||!de||lat.length>40||de.length>80){bad++;return;}
+    if(emo.length>8)emo='';
+    var k=keyOf(lat);if(!k){bad++;return;}
+    if(seen[k])return;
+    seen[k]=1;out.push([lat,de,emo]);
+  });
+  return{words:out.slice(0,150),bad:bad};
+}
+function wordsToText(li){return li.words.map(function(a){return a[0]+' = '+a[1]+(a[2]?' = '+a[2]:'');}).join('\n');}
+
+/* Ansichten */
+function topbar(){var r=RANKS[rank()];return '<header class="top"><div class="brand">Monstra Latina</div><div class="chips"><span class="chip">🔥 '+curStreak()+'</span><span class="chip">'+r.e+' '+r.n+'</span></div></header>';}
+function xpLine(){var i=rank(),r=RANKS[i],nx=RANKS[i+1];return{pct:nx?Math.round((st.xp-r.x)/(nx.x-r.x)*100):100,txt:fmt(st.xp)+' XP'+(nx?' · noch '+fmt(nx.x-st.xp)+' bis '+nx.n:' · höchster Rang')};}
+
+function homeV(){
+  var n0=note;note='';
+  var nt=n0?'<div class="note" role="status">'+esc(n0)+'</div>':'';
+  if(!st.lists.length){
+    return nt+'<section class="card center"><div class="emoji">🐲</div><h2 style="margin:0">Los geht’s</h2><p>Hier gibt es keine fertigen Wortlisten. Du tippst die Wörter deiner Lektion selbst ein, eine Zeile pro Wort. Danach kannst du mit Karten, Quiz und Boss-Runden üben und Monster sammeln.</p><button class="btn big" data-a="newList">➕ Liste anlegen</button><button class="btn sec" data-a="demo">Mit 8 Beispielwörtern ausprobieren</button><p class="muted small" style="margin:0">Alles bleibt auf diesem Gerät. Es gibt kein Konto.</p></section>';
+  }
+  var r=RANKS[rank()],x=xpLine(),n=selWords().length;
+  var leks=st.lists.map(function(li){
+    var p=lekProg(li.id),on=st.sel.indexOf(li.id)>=0,pc=Math.round(p.p*100);
+    return '<div class="lek'+(on?' on':'')+'"><label class="lek-main"><input type="checkbox" data-a="togl" data-l="'+li.id+'"'+(on?' checked':'')+'><span class="mon">'+monSvg(li.id,stageOf(p.p),!!st.boss[li.id],56)+'</span><span class="lek-txt"><b>'+esc(li.name)+'</b><span class="bar"><i style="width:'+pc+'%"></i></span><small>'+p.n+' Wörter · '+p.learned+' sitzen schon</small></span></label><div class="rowbtns"><button class="btn sm ghost" data-a="boss" data-l="'+li.id+'">Boss</button><button class="btn sm ghost" data-a="edit" data-l="'+li.id+'" aria-label="Liste ändern">✎</button></div></div>';
+  }).join('');
+  return nt+'<section class="hero"><div class="rankrow"><span class="rk">'+r.e+'</span><div><div class="rkn">'+r.n+'</div><div class="muted small">'+x.txt+'</div></div></div><div class="xpbar" role="progressbar" aria-valuenow="'+x.pct+'" aria-valuemin="0" aria-valuemax="100"><i style="width:'+x.pct+'%"></i></div><div class="muted small">🐲 '+collTotal()+'/'+(st.lists.length*4)+' Monster-Punkte · 🔥 '+curStreak()+' Tage in Folge</div></section>'+
+  '<div class="actions"><button class="btn big" data-a="startCards">🃏 Karten</button><button class="btn big" data-a="startQuiz">🎯 Quiz</button></div>'+
+  '<div class="actions"><button class="btn big sec" data-a="startType">⌨️ Tippen (schwer)</button></div>'+
+  '<div><h2>Was üben?</h2><p class="muted small">'+n+' Wörter ausgewählt. Tippe auf eine Liste, um sie an- oder abzuwählen. Mit „Boss“ trittst du gegen das Monster der Liste an.</p></div>'+
+  '<div class="leks">'+leks+'</div>'+
+  '<button class="btn sec" data-a="newList">➕ Liste anlegen</button>'+
+  '<p class="foot">Diese App enthält keine Wortlisten aus Lehrbüchern. Du trägst deine Wörter selbst ein, sie bleiben nur auf deinem Gerät.</p>';
+}
+
+function editV(){
+  var ph=['amicus = Freund','aqua = Wasser = 💧','via = Weg, Straße'].map(esc).join('&#10;');
+  var del='';
+  if(E.id)del=E.del?'<p class="small">Diese Liste wirklich löschen?</p><div class="two"><button class="btn sm no" data-a="editDel2">Ja, löschen</button><button class="btn sm sec" data-a="editDelNo">Abbrechen</button></div>':'<button class="btn sm ghost" data-a="editDel1">Liste löschen</button>';
+  return '<div class="counter"><b>'+(E.id?'Liste ändern':'Neue Liste')+'</b><button class="btn sm ghost" data-a="editCancel">✕ Abbrechen</button></div>'+
+  '<section class="card"><label class="field">Name der Liste<input id="lname" type="text" maxlength="30" value="'+esc(E.name)+'" placeholder="z. B. Lektion 1" autocomplete="off"></label>'+
+  '<label class="field">Wörter, eine Zeile pro Wort<textarea id="ltext" rows="12" placeholder="'+ph+'">'+esc(E.text)+'</textarea></label>'+
+  '<p class="muted small">Schreibe lateinisch = deutsch. Ein Emoji dahinter ist freiwillig. Bei bekannten lateinischen Wörtern ergänzt die App Bild und Eselsbrücke selbst.</p>'+
+  (E.err?'<p class="err" role="alert">'+esc(E.err)+'</p>':'')+
+  '<button class="btn big" data-a="editSave">Speichern</button>'+del+'</section>';
+}
+
+function cardsV(){
+  if(C.i>=C.deck.length)return cardsDone();
+  var w=byId(C.deck[C.i]),ld=C.dir==='ld',emo=w.emo||'📝';
+  var inf=w.info?'<div class="muted small">'+esc(w.info)+'</div>':'';
+  var front=ld?'<div class="emoji">'+emo+'</div><div class="latin">'+esc(w.lat)+'</div>'+inf:'<div class="emoji">'+emo+'</div><div class="german">'+esc(w.de)+'</div>';
+  var hk=w.hook?'<div class="hook">💡 '+esc(w.hook)+'</div>':'';
+  var mine='<input class="mine" id="mine" data-id="'+esc(w.id)+'" type="text" maxlength="90" placeholder="Eigene Eselsbrücke …" value="'+esc(st.hooks[w.id]||'')+'" aria-label="Eigene Eselsbrücke">';
+  var back=ld?'<div class="german">'+esc(w.de)+'</div><div class="emoji sm">'+emo+'</div>'+hk+mine:'<div class="latin">'+esc(w.lat)+'</div>'+inf+'<div class="emoji sm">'+emo+'</div>'+hk+mine;
+  return '<div class="counter"><span>Karte '+(C.i+1)+' / '+C.deck.length+'</span><button class="btn sm ghost" data-a="quit">✕ Beenden</button></div>'+
+  '<div class="seg" role="group" aria-label="Richtung"><button data-a="dir" data-d="ld" aria-pressed="'+ld+'">Latein → Deutsch</button><button data-a="dir" data-d="dl" aria-pressed="'+(!ld)+'">Deutsch → Latein</button></div>'+
+  '<div class="flip'+(C.flip?' is-flipped':'')+'" data-a="flipc"><div class="inner"><div class="face front">'+front+'<div class="muted small">Tippen zum Umdrehen</div></div><div class="face back">'+back+'</div></div></div>'+
+  '<div class="ctl"><button class="btn sec" id="flipbtn" data-a="flip"'+(C.flip?' hidden':'')+'>Umdrehen</button><div class="two" id="ans"'+(C.flip?'':' hidden')+'><button class="btn no" data-a="nope">😅 Noch nicht</button><button class="btn yes" data-a="know">🎉 Gewusst</button></div></div>';
+}
+function cardsDone(){
+  return '<section class="card center"><div class="emoji">🎉</div><h2 style="margin:0">Stapel geschafft</h2><p>'+C.known+' Karten gewusst · +'+C.xp+' XP</p><div class="actions" style="width:100%"><button class="btn" data-a="startCards">Nochmal</button><button class="btn sec" data-a="startQuiz">Quiz starten</button></div><button class="btn ghost" data-a="quit">Zur Startseite</button></section>';
+}
+
+function quizV(){
+  var q=Q.qs[Q.i],w=q.w,ans=Q.ans,last=Q.i>=Q.qs.length-1;
+  var lab={ld:'Was heißt das auf Deutsch?',dl:'Wie heißt das auf Latein?',pl:'Welches lateinische Wort passt zum Bild?'}[q.type];
+  var prompt=q.type==='ld'?'<div class="latin">'+esc(w.lat)+'</div>':q.type==='dl'?'<div class="german">'+esc(w.de)+'</div>':'<div class="emoji xl">'+w.emo+'</div>';
+  var dots=Q.qs.map(function(_,i){var c=i<Q.res.length?(Q.res[i]?'g':'b'):(i===Q.i?'c':'');return '<i class="'+c+'"></i>';}).join('');
+  var head='<div class="counter"><div class="prog" aria-label="Fortschritt">'+dots+'</div>'+(Q.mode==='daily'?'':'<button class="btn sm ghost" data-a="quit">✕</button>')+'</div>';
+  var boss='';
+  if(Q.mode==='boss'){var hp=Q.qs.length-Q.res.filter(Boolean).length,M=monFor(Q.l);boss='<div class="boss"><div class="mon">'+monSvg(Q.l,3,false,72)+'</div><div class="bi"><b>'+(M?esc(M.name):'Boss')+'</b><div class="hpbar"><i style="width:'+Math.round(hp/Q.qs.length*100)+'%"></i></div><div class="lives" aria-label="Leben">'+'❤️'.repeat(Math.max(0,Q.lives))+'🖤'.repeat(3-Math.max(0,Q.lives))+'</div></div></div>';}
+  var opts=q.opts.map(function(o,i){var t=q.type==='ld'?o.de:o.lat,c='opt';if(ans!=null){if(o.id===w.id)c+=' good';else if(i===ans)c+=' bad';}return '<button class="'+c+'" data-a="opt" data-i="'+i+'"'+(ans!=null?' disabled':'')+'><span class="k">'+(i+1)+'</span><span>'+esc(t)+'</span></button>';}).join('');
+  var fb='';
+  if(ans!=null){var ok=q.opts[ans].id===w.id;
+    fb='<div class="fb '+(ok?'ok':'no')+'" aria-live="polite"><div class="fbh">'+esc(Q.msg)+(Q.gain?' +'+Q.gain+' XP':'')+'</div><div class="fbw"><span class="emoji sm">'+(w.emo||'📝')+'</span> <b>'+esc(w.lat)+'</b> = '+esc(w.de)+'</div>'+(w.info?'<div class="muted small">'+esc(w.info)+'</div>':'')+(w.hook?'<div class="hook">💡 '+esc(w.hook)+'</div>':'')+'<button class="btn" id="nextbtn" data-a="next">'+(last||(Q.mode==='boss'&&Q.lives<=0)?'Ergebnis':'Weiter')+'</button></div>';}
+  return head+boss+'<div class="qcard"><div class="muted small">'+lab+'</div>'+prompt+'</div><div class="opts">'+opts+'</div>'+fb;
+}
+
+function shareBlock(text){return '<pre class="share" id="sharetxt">'+esc(text)+'</pre><button class="btn sec" data-a="copy">📋 Kopieren für WhatsApp</button>';}
+function gridOf(res){return res.map(function(ok){return ok?'🟩':'🟥';}).join('');}
+function dd(){var d=new Date();return pad(d.getDate())+'.'+pad(d.getMonth()+1)+'.';}
+
+function resultV(){
+  var f=Q.final,grid=gridOf(Q.res),up=rank()>Q.rank0?'<div class="up">Neuer Rang: '+RANKS[rank()].e+' '+RANKS[rank()].n+'!</div>':'';
+  var title,sub,share,body='',li=Q.mode==='boss'?listById(Q.l):null,M=Q.mode==='boss'?monFor(Q.l):null;
+  if(Q.mode==='boss'){
+    title=f.win?'Boss besiegt!':'Der Boss ist entkommen';
+    sub=f.win?(M?M.name+' trägt jetzt eine Krone.':''):'Übe noch ein bisschen und versuch es nochmal.';
+    body='<div class="mon">'+monSvg(Q.l,3,f.win,120)+'</div>';
+    share='Monstra Latina · Boss '+(li?li.name:'')+' '+(f.win?'besiegt 👑':'noch nicht')+'\n'+grid;
+  } else if(Q.mode==='daily'){
+    title='Tagesrätsel '+dd();sub='Morgen warten neue Wörter.';
+    share='Monstra Latina '+dd()+' · '+f.score+'/'+f.n+'\n'+grid;
+  } else if(Q.mode==='type'){
+    title=f.score===f.n?'Perfekt getippt!':'Geschafft!';sub='';
+    share='Monstra Latina · Tippen '+f.score+'/'+f.n+'\n'+grid;
+  } else {
+    title=f.score===f.n?'Perfekt!':'Geschafft!';sub='';
+    share='Monstra Latina · Quiz '+f.score+'/'+f.n+'\n'+grid;
+  }
+  var again=Q.mode==='boss'?'<button class="btn" data-a="boss" data-l="'+Q.l+'">Nochmal</button>':Q.mode==='quiz'?'<button class="btn" data-a="startQuiz">Neues Quiz</button>':Q.mode==='type'?'<button class="btn" data-a="startType">Nochmal tippen</button>':'';
+  return '<section class="card center">'+up+body+'<div class="bigscore">'+f.score+'/'+f.n+'</div><h2 style="margin:0">'+esc(title)+'</h2>'+(sub?'<p class="muted">'+esc(sub)+'</p>':'')+'<div class="grid">'+grid+'</div><p>+'+Q.xp+' XP</p>'+shareBlock(share)+'<div class="actions" style="width:100%">'+again+'<button class="btn ghost" data-a="quit">Zur Startseite</button></div></section>';
+}
+
+function dailyV(){
+  var d=st.daily;
+  if(d&&d.date===today()){
+    var share='Monstra Latina '+dd()+' · '+d.score+'/'+d.n+'\n'+gridOf(d.res);
+    return '<section class="card center"><h2 style="margin:0">Tagesrätsel '+dd()+'</h2><div class="bigscore">'+d.score+'/'+d.n+'</div><div class="grid">'+gridOf(d.res)+'</div><p class="muted">Heute ist es geschafft. Morgen gibt es neue Wörter.</p>'+shareBlock(share)+'</section>';
+  }
+  if(W.length<4)return '<section class="card center"><div class="emoji">📅</div><h2 style="margin:0">Tagesrätsel</h2><p>Lege zuerst eine Liste mit mindestens 4 Wörtern an.</p><button class="btn" data-a="newList">➕ Liste anlegen</button></section>';
+  return '<section class="card center"><div class="emoji">📅</div><h2 style="margin:0">Tagesrätsel '+dd()+'</h2><p>Bis zu 10 Wörter aus allen deinen Listen. Wer genau dieselben Wörter eingegeben hat, bekommt heute dieselben Fragen. Einmal pro Tag, danach kannst du dein Ergebnis in die Klassengruppe schicken.</p><button class="btn big" data-a="startDaily">Los geht’s</button></section>';
+}
+
+function collV(){
+  var tiles=st.lists.map(function(li){var p=lekProg(li.id),s=stageOf(p.p),cr=!!st.boss[li.id],M=monFor(li.id);return '<div class="tile"><div class="mon">'+monSvg(li.id,s,cr,110)+'</div><b>'+esc(M.name)+'</b><span class="small">'+STAGES[s]+' · '+esc(li.name)+'</span><span class="small muted">'+(cr?'👑 Boss besiegt':'Boss offen')+'</span></div>';}).join('')+
+    '<div class="tile locked"><div class="mon">'+monSvg(0,0,false,110)+'</div><b>Nächste Liste</b><button class="btn sm sec" data-a="newList">➕ Anlegen</button></div>';
+  var shaky=W.filter(function(w){return st.seen[w.id]&&bx(w)===0;}).slice(0,14);
+  var sh=shaky.length?'<div class="words">'+shaky.map(function(w){return '<span class="word">'+(w.emo||'📝')+' '+esc(w.lat)+'</span>';}).join('')+'</div>':'<p class="muted small">'+(Object.keys(st.seen).length?'Im Moment wackelt nichts. Sehr gut!':'Übe ein paar Wörter, dann siehst du hier, was noch wackelt.')+'</p>';
+  var r=RANKS[rank()];
+  var shareP=(st.name?st.name+' · ':'')+r.e+' '+r.n+' · '+fmt(st.xp)+' XP · 🔥 '+curStreak()+' Tage · 🐲 '+collTotal()+'/'+(Math.max(1,st.lists.length)*4);
+  var reset=resetStep===0?'<button class="btn sm ghost" data-a="reset1">Fortschritt löschen</button>':'<p class="small">Wirklich alles löschen, auch deine Listen? Das lässt sich nicht rückgängig machen.</p><div class="two"><button class="btn sm no" data-a="reset2">Ja, löschen</button><button class="btn sm sec" data-a="resetNo">Abbrechen</button></div>';
+  return '<div><h2 style="margin-top:6px">Meine Monster</h2></div><div class="tiles">'+tiles+'</div>'+
+  '<div><h2>Das wackelt noch</h2>'+sh+'</div>'+
+  '<section class="card"><h2 style="margin:0">Mein Ergebnis</h2><label class="field">Spitzname (optional)<input id="nick" type="text" maxlength="14" value="'+esc(st.name)+'" autocomplete="off"></label>'+shareBlock(shareP)+'<p class="muted small">Alles bleibt auf diesem Gerät. Es gibt kein Konto und keine Online-Rangliste: Vergleicht euch über die Gruppe.</p></section>'+
+  '<div>'+reset+'</div>';
+}
+
+function activeTab(){if(view==='quiz'&&Q&&Q.mode==='daily')return 'daily';if(view==='edit')return 'home';return view;}
+function nav(){
+  var items=[['home','🏠','Start'],['cards','🃏','Karten'],['quiz','🎯','Quiz'],['daily','📅','Täglich'],['coll','🐲','Sammlung']],a=activeTab();
+  return '<nav class="nav" aria-label="Hauptmenü"><div class="navin">'+items.map(function(t){return '<button data-a="tab" data-v="'+t[0]+'"'+(a===t[0]?' aria-current="page"':'')+'><span>'+t[1]+'</span><span>'+t[2]+'</span></button>';}).join('')+'</div></nav>';
+}
+
+function render(){
+  var b;
+  if(view==='home')b=homeV();
+  else if(view==='edit')b=E?editV():homeV();
+  else if(view==='cards')b=C?cardsV():homeV();
+  else if(view==='quiz')b=Q?(Q.final?resultV():(Q.mode==='type'?typeV():quizV())):homeV();
+  else if(view==='daily')b=dailyV();
+  else b=collV();
+  app.innerHTML='<div class="wrap">'+topbar()+b+'</div>'+nav();
+  if(view==='quiz'&&Q&&Q.mode==='type'&&!Q.final&&Q.ans==null){var ti=document.getElementById('tans');if(ti){ti.focus();}}
+}
+function go(v){if(v)view=v;render();window.scrollTo(0,0);}
+
+/* Aktionen */
+function act(a,d,e){
+  d=d||{};
+  switch(a){
+    case 'tab':
+      if(d.v==='cards'){if(C)go('cards');else startCards();}
+      else if(d.v==='quiz'){if(Q&&!Q.final)go('quiz');else startQuiz();}
+      else if(d.v==='daily'){if(dailyBlocked())go('quiz');else go('daily');}
+      else go(d.v);
+      break;
+    case 'togl':{var l=+d.l,i=st.sel.indexOf(l);if(i>=0)st.sel.splice(i,1);else st.sel.push(l);if(!st.sel.length)st.sel=[l];save();render();break;}
+    case 'startCards':startCards();break;
+    case 'startQuiz':startQuiz();break;
+    case 'startDaily':startDaily();break;
+    case 'boss':startBoss(+d.l);break;
+    case 'newList':E={id:0,name:'',text:'',err:'',del:0};view='edit';go();break;
+    case 'demo':{var id=st.nid++;st.lists.push({id:id,name:'Beispiel',words:DEMO.map(function(x){return x.slice();})});st.sel.push(id);buildW();save();go('home');break;}
+    case 'edit':{var li=listById(+d.l);if(!li)break;E={id:li.id,name:li.name,text:wordsToText(li),err:'',del:0};view='edit';go();break;}
+    case 'editCancel':E=null;go('home');break;
+    case 'editSave':{
+      var res=parseList(E.text),name=E.name.trim()||'Meine Liste';
+      if(!res.words.length){E.err='Ich habe keine Wörter erkannt. Schreibe eine Zeile pro Wort: lateinisch = deutsch.';render();break;}
+      var li2;
+      if(E.id){li2=listById(E.id);li2.name=name;li2.words=res.words;}
+      else{li2={id:st.nid++,name:name,words:res.words};st.lists.push(li2);st.sel.push(li2.id);}
+      buildW();save();E=null;
+      var msgs=[];
+      if(res.bad)msgs.push(res.bad+(res.bad===1?' Zeile wurde':' Zeilen wurden')+' übersprungen, weil das „=“ fehlt.');
+      if(res.words.length<4)msgs.push('Für Quiz und Boss brauchst du mindestens 4 Wörter.');
+      note=msgs.join(' ');go('home');break;}
+    case 'editDel1':E.del=1;render();break;
+    case 'editDelNo':E.del=0;render();break;
+    case 'editDel2':{
+      var id2=E.id;st.lists=st.lists.filter(function(x){return x.id!==id2;});st.sel=st.sel.filter(function(x){return x!==id2;});delete st.boss[id2];
+      if(!st.sel.length&&st.lists.length)st.sel=[st.lists[0].id];
+      buildW();save();E=null;C=null;Q=null;go('home');break;}
+    case 'dir':lastDir=d.d;C.dir=d.d;C.flip=false;render();break;
+    case 'flipc':if(e&&e.target.closest&&e.target.closest('input'))break;
+    case 'flip':{C.flip=!C.flip;var f=app.querySelector('.flip');if(f)f.classList.toggle('is-flipped',C.flip);var an=document.getElementById('ans'),fb=document.getElementById('flipbtn');if(an)an.hidden=!C.flip;if(fb)fb.hidden=C.flip;break;}
+    case 'know':case 'nope':{
+      var w=byId(C.deck[C.i]);if(!w)break;var b=bx(w);st.seen[w.id]=1;
+      if(a==='know'){if(b<2)st.box[w.id]=b+1;addXp(2);C.xp+=2;C.known++;}
+      else{st.box[w.id]=Math.max(0,b-1);if(!C.again[w.id]){C.again[w.id]=1;C.deck.push(w.id);C.tot++;}save();}
+      C.i++;C.flip=false;render();window.scrollTo(0,0);break;}
+    case 'opt':if(Q&&Q.mode!=='type'&&+d.i>=0&&+d.i<4)answer(+d.i);break;
+    case 'startType':startType();break;
+    case 'tcheck':typeAnswer(false);break;
+    case 'tskip':typeAnswer(true);break;
+    case 'next':nextQ();break;
+    case 'quit':C=null;Q=null;go('home');break;
+    case 'copy':{
+      var el=document.getElementById('sharetxt'),btn=e&&e.target.closest('button');
+      var done=function(t){if(btn){btn.textContent=t;setTimeout(function(){btn.textContent='📋 Kopieren für WhatsApp';},1800);}};
+      var sel=function(){try{var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}catch(x){}done('Text markiert, bitte kopieren');};
+      try{navigator.clipboard.writeText(el.textContent).then(function(){done('Kopiert ✓');},sel);}catch(x){sel();}
+      break;}
+    case 'reset1':resetStep=1;render();break;
+    case 'resetNo':resetStep=0;render();break;
+    case 'reset2':st=D();save();buildW();C=null;Q=null;E=null;resetStep=0;go('home');break;
+  }
+}
+app.addEventListener('input',function(e){if(e.target.id==='tans'&&Q)Q.typed=e.target.value;});
+app.addEventListener('keydown',function(e){if(e.target.id==='tans'&&e.key==='Enter'){e.preventDefault();typeAnswer(false);}});
+app.addEventListener('click',function(e){var t=e.target.closest('[data-a]');if(!t)return;act(t.dataset.a,t.dataset,e);});
+app.addEventListener('input',function(e){if(!E)return;if(e.target.id==='lname')E.name=e.target.value;else if(e.target.id==='ltext')E.text=e.target.value;});
+app.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.id==='mine'){var h=t.value.trim();if(h)st.hooks[t.dataset.id]=h;else delete st.hooks[t.dataset.id];save();}
+  else if(t.id==='nick'){st.name=t.value.trim().slice(0,14);save();var p=document.getElementById('sharetxt');if(p){var r=RANKS[rank()];p.textContent=(st.name?st.name+' · ':'')+r.e+' '+r.n+' · '+fmt(st.xp)+' XP · 🔥 '+curStreak()+' Tage · 🐲 '+collTotal()+'/'+(Math.max(1,st.lists.length)*4);}}
+});
+document.addEventListener('keydown',function(e){
+  if(/INPUT|TEXTAREA/.test(e.target.tagName))return;
+  if(view==='cards'&&C&&C.i<C.deck.length){
+    if(e.key===' '||e.key==='ArrowUp'||e.key==='ArrowDown'){if(e.target.tagName==='BUTTON')return;e.preventDefault();act('flip');}
+    else if(C.flip&&e.key==='ArrowRight')act('know');
+    else if(C.flip&&e.key==='ArrowLeft')act('nope');
+  } else if(view==='quiz'&&Q&&!Q.final){
+    if(Q.ans==null&&/^[1-4]$/.test(e.key))act('opt',{i:String(+e.key-1)});
+    else if(Q.ans!=null&&e.key==='Enter'&&e.target.tagName!=='BUTTON')act('next');
+  }
+});
+render();
+})();
+</script>
+</body>
+</html>

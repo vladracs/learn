@@ -1,0 +1,399 @@
+<!doctype html><html><head><meta charset=utf8><meta name="robots" content="noindex,nofollow"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Jungsteinzeit Lernkarten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: eine Spalte (max 960px), oben feste Reiterleiste. Braindump als Lesefläche mit Gruppen,
+   Karten und Quiz als zentrierte Einzelkarte. Die Nummer-Plakette entspricht der Nummer auf dem Arbeitsblatt. */
+:root {
+  --bg: #EDEFEA;
+  --surface: #FBFBF8;
+  --surface2: #E2E7E0;
+  --ink: #1B262C;
+  --muted: #586870;
+  --line: #CDD4CC;
+  --accent: #2B59C3;
+  --on-accent: #FFFFFF;
+  --food: #2F8A56;
+  --store: #B97D0E;
+  --home: #7A55C2;
+  --cloth: #C23C78;
+  --tool: #D2551F;
+  --good: #2F8A56;
+  --bad: #C0392B;
+  --f-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171B; --surface: #1A2328; --surface2: #222E34; --ink: #E9EFF1; --muted: #9DAEB5;
+    --line: #2E3C43; --accent: #7AA2FF; --on-accent: #0E1A33;
+    --food: #6CC18A; --store: #E8B04A; --home: #AE92E8; --cloth: #EE7FA8; --tool: #F28D5C;
+    --good: #6CC18A; --bad: #F0877B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171B; --surface: #1A2328; --surface2: #222E34; --ink: #E9EFF1; --muted: #9DAEB5;
+  --line: #2E3C43; --accent: #7AA2FF; --on-accent: #0E1A33;
+  --food: #6CC18A; --store: #E8B04A; --home: #AE92E8; --cloth: #EE7FA8; --tool: #F28D5C;
+  --good: #6CC18A; --bad: #F0877B;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  padding-inline: 16px; padding-block: 16px 56px;
+}
+.wrap { max-width: 960px; margin: 0 auto; }
+h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.12; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 16px; }
+.head h1 { font-size: clamp(32px, 8vw, 48px); font-weight: 800; letter-spacing: -0.02em; }
+.head p { margin: 0; color: var(--muted); }
+
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px 8px; margin-bottom: 20px; }
+.seg { display: grid; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 12px; }
+.seg.three { grid-template-columns: repeat(3, 1fr); }
+.seg.two { grid-template-columns: repeat(2, 1fr); }
+.tab, .segbtn {
+  font: inherit; font-weight: 700; padding: 10px 8px; min-height: 44px; border: 0; border-radius: 9px;
+  background: transparent; color: var(--muted); cursor: pointer;
+}
+.tab[aria-selected="true"], .segbtn[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.18); }
+
+.lbl { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+h2 { font-size: clamp(22px, 5vw, 28px); margin-top: 40px; margin-bottom: 4px; }
+.lead { color: var(--muted); margin: 0 0 12px; max-width: 62ch; }
+
+/* Braindump */
+.kern { display: grid; gap: 10px; padding-block: 20px; border-block: 2px solid var(--ink); }
+.kern .big { margin: 0; font-family: var(--f-display); font-weight: 600; font-size: clamp(21px, 4.6vw, 30px); line-height: 1.25; max-width: 36ch; text-wrap: pretty; }
+.kern .zeit { margin: 0; color: var(--muted); }
+
+.chains { display: grid; gap: 18px; margin-top: 14px; }
+.chain-row { display: grid; gap: 6px; }
+.chain { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; row-gap: 8px; }
+.chain li { display: flex; align-items: center; }
+.chain li + li::before { content: "\2192"; padding-inline: 8px; color: var(--muted); font-weight: 700; }
+.step { background: var(--surface); border: 1px solid var(--line); padding: 6px 11px; border-radius: 8px; font-size: 15px; }
+
+.group { margin-top: 22px; }
+.group h3 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; font-size: 19px; }
+.group h3 .sub { font-family: var(--f-body); font-weight: 400; font-size: 14px; color: var(--muted); }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: var(--cat); align-self: center; flex: none; }
+.items { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 12px; margin-top: 10px; }
+.item { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; align-items: start; }
+.item .ico { color: var(--cat); }
+.item-top { display: flex; align-items: center; gap: 10px; }
+.item h4 { font-size: 21px; font-weight: 800; }
+.nutzen { margin: 8px 0 0; padding-left: 18px; }
+.nutzen li { margin-block: 2px; }
+.nutzen li::marker { color: var(--cat); }
+.bild { margin: 8px 0 0; font-size: 14px; color: var(--muted); }
+
+.nr { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding-inline: 6px; border-radius: 7px; background: var(--ink); color: var(--bg); font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
+b.nr { vertical-align: 1px; margin-inline: 2px; }
+
+.story { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; font-size: 18px; line-height: 1.85; max-width: 62ch; }
+.foot { margin-top: 28px; font-size: 13px; color: var(--muted); max-width: 62ch; }
+
+.btn { font: inherit; font-weight: 700; border-radius: 12px; border: 2px solid var(--ink); background: var(--surface); color: var(--ink); padding: 10px 18px; min-height: 48px; cursor: pointer; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.good { border-color: var(--good); background: color-mix(in srgb, var(--good) 18%, var(--surface)); }
+.btn.bad { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, var(--surface)); }
+.btn.small { min-height: 40px; padding: 6px 14px; font-size: 15px; }
+.btn:active { transform: translateY(1px); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+
+/* Karten */
+.stage { max-width: 520px; margin: 0 auto; display: grid; gap: 16px; }
+.meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.count { font-weight: 700; font-variant-numeric: tabular-nums; }
+.card { perspective: 1400px; height: 440px; border-radius: 20px; cursor: pointer; }
+.flip { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .5s cubic-bezier(.3,.7,.2,1); }
+.card.is-flipped .flip { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0; display: flex; flex-direction: column; gap: 10px; overflow: auto;
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  background: var(--surface); border: 2px solid var(--ink); border-radius: 20px; padding: 18px 20px;
+}
+.face.back { transform: rotateY(180deg); }
+.f-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.f-icon { flex: 1; display: grid; place-items: center; color: var(--cat); }
+.f-hint { margin: 0; text-align: center; font-family: var(--f-display); font-weight: 600; font-size: 19px; }
+.f-tap { margin: 0; text-align: center; color: var(--muted); font-size: 14px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 11px; border-radius: 999px; background: color-mix(in srgb, var(--cat) 16%, var(--surface)); font-size: 13px; font-weight: 700; }
+.b-name { font-size: 36px; font-weight: 800; letter-spacing: -0.01em; }
+.back .nutzen { margin-top: 2px; font-size: 18px; }
+.back p { margin: 0; }
+.ctrl { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 8px; }
+.dots { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
+.dots button { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0; }
+.dots button[aria-current="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+/* Quiz */
+.qtools { display: grid; gap: 10px; margin-bottom: 16px; }
+.qtop { display: flex; justify-content: space-between; gap: 8px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.bar { height: 8px; border-radius: 99px; background: var(--surface2); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .3s; }
+.qcard { background: var(--surface); border: 2px solid var(--ink); border-radius: 20px; padding: 20px; display: grid; gap: 16px; }
+.q-prompt { margin: 0; font-family: var(--f-display); font-weight: 600; font-size: 21px; line-height: 1.25; }
+.q-icon { display: grid; place-items: center; color: var(--cat); padding-block: 8px; }
+.q-list { margin: 0; padding-left: 20px; font-size: 19px; }
+.answer { background: var(--surface2); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+.answer h3 { font-size: 28px; font-weight: 800; }
+.answer p { margin: 0; }
+.answer .row { display: flex; align-items: center; gap: 12px; }
+.answer .row .ico { color: var(--cat); flex: none; }
+.ctrl2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ctrl2.one { grid-template-columns: 1fr; }
+.missed { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.missed li { display: flex; align-items: center; gap: 12px; font-weight: 700; }
+.missed .ico { color: var(--cat); }
+.summary h3 { font-size: 30px; font-weight: 800; }
+.summary p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flip, .bar i { transition: none; }
+}
+@media (max-width: 380px) {
+  .b-name { font-size: 30px; }
+  .card { height: 460px; }
+}
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <h1>Jungsteinzeit</h1>
+    <p>Erfindungen und Entdeckungen, 9 Karten zum Arbeitsblatt</p>
+  </header>
+
+  <nav class="tabs" aria-label="Ansicht">
+    <div class="seg three" role="tablist">
+      <button class="tab" role="tab" data-view="braindump" aria-selected="true">Braindump</button>
+      <button class="tab" role="tab" data-view="karten" aria-selected="false">Karten</button>
+      <button class="tab" role="tab" data-view="quiz" aria-selected="false">Quiz</button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="view-braindump" role="tabpanel"></section>
+
+    <section id="view-karten" role="tabpanel" hidden>
+      <div class="stage">
+        <div class="meta">
+          <span class="count" id="fcCount" aria-live="polite"></span>
+          <button class="btn small" id="fcShuffle" type="button">Mischen</button>
+        </div>
+        <div class="card" id="fcCard" role="button" tabindex="0" aria-label="Karte umdrehen">
+          <div class="flip">
+            <div class="face front" id="fcFront"></div>
+            <div class="face back" id="fcBack"></div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <button class="btn" id="fcPrev" type="button">Zurück</button>
+          <button class="btn primary" id="fcFlip" type="button">Umdrehen</button>
+          <button class="btn" id="fcNext" type="button">Weiter</button>
+        </div>
+        <div class="dots" id="fcDots" aria-label="Karte wählen"></div>
+      </div>
+    </section>
+
+    <section id="view-quiz" role="tabpanel" hidden>
+      <div class="stage">
+        <div class="qtools">
+          <div class="lbl">Frage zeigt</div>
+          <div class="seg two">
+            <button class="segbtn" type="button" data-mode="bild" aria-pressed="true">Das Bild</button>
+            <button class="segbtn" type="button" data-mode="text" aria-pressed="false">Die Stichworte</button>
+          </div>
+          <div class="qtop"><span id="qProgress"></span><span id="qScore"></span></div>
+          <div class="bar"><i id="qBar" style="width:0%"></i></div>
+        </div>
+        <div id="quizBox"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function () {
+  var DECK = [{"n": 1, "id": "ackerbau", "name": "Ackerbau", "cat": "food", "icon": "ackerbau", "bild": "Getreideähren", "nutzen": ["Menschen leben vom Ertrag ihrer Felder", "werden sesshaft"], "merk": "Felder brauchen Pflege, also bleibt man am Ort."}, {"n": 2, "id": "hausbau", "name": "Hausbau", "cat": "home", "icon": "hausbau", "bild": "Haus mit Strohdach", "nutzen": ["Menschen bauen feste Häuser", "leben in der Nähe ihrer Felder", "zum Teil Pfahlbauten"], "merk": "Das Feld ist in der Nähe, das Haus bleibt stehen."}, {"n": 3, "id": "toepferei", "name": "Töpferei", "cat": "store", "icon": "toepferei", "bild": "Tongefäße", "nutzen": ["Behälter für Nahrungsvorräte, Geschirr", "Vorräte vor Ungeziefer geschützt"], "merk": "Ein Tontopf ist der Vorratsschrank."}, {"n": 4, "id": "tierzucht", "name": "Tierzucht", "cat": "food", "icon": "tierzucht", "bild": "Rind", "nutzen": ["Fleisch, Milch, Wolle", "Hilfe beim Pflügen"], "merk": "Das Tier liefert Essen, Wolle und Muskelkraft."}, {"n": 5, "id": "hakenpflug", "name": "Hakenpflug", "cat": "food", "icon": "hakenpflug", "bild": "Pflug aus Holz mit Haken", "nutzen": ["Lockerung großer Flächen des Ackerbodens", "für den Getreideanbau"], "merk": "Rinder ziehen den Pflug: mehr Feld, mehr Getreide."}, {"n": 6, "id": "steinbohrung", "name": "Steinbohrung", "cat": "tool", "icon": "steinbohrung", "bild": "Steinbeil mit Loch und Holzstiel", "nutzen": ["Feste und sicherere Befestigung von Steinklingen am Holzschaft"], "merk": "Loch in den Stein, Stiel hindurch: das hält."}, {"n": 7, "id": "muehle", "name": "Mühle", "cat": "store", "icon": "muehle", "bild": "Mahlstein mit Reibstein", "nutzen": ["Herstellung von Mehl aus Getreidekörnern"], "merk": "Körner rein, Mehl raus."}, {"n": 8, "id": "spinnen", "name": "Spinnen", "cat": "cloth", "icon": "spinnen", "bild": "Spindel mit Wolle", "nutzen": ["Herstellung von Wollfäden", "zum Weben von Stoffen"], "merk": "Wolle wird zum Faden."}, {"n": 9, "id": "webstuhl", "name": "Webstuhl", "cat": "cloth", "icon": "webstuhl", "bild": "Webrahmen mit Fäden", "nutzen": ["Herstellung von Stoffen", "feste und warme Gewänder"], "merk": "Fäden werden zu Stoff, Stoff zu Kleidung."}], ICONS = {"ackerbau": "<path d=\"M32 60V14\"/><path d=\"M32 22C27 17 27 10 32 5C37 10 37 17 32 22Z\"/><path d=\"M32 30C25 30 21 26 21 19C28 19 32 24 32 30Z\"/><path d=\"M32 30C39 30 43 26 43 19C36 19 32 24 32 30Z\"/><path d=\"M32 42C25 42 21 38 21 31C28 31 32 36 32 42Z\"/><path d=\"M32 42C39 42 43 38 43 31C36 31 32 36 32 42Z\"/><path d=\"M32 54C25 54 21 50 21 43C28 43 32 48 32 54Z\"/><path d=\"M32 54C39 54 43 50 43 43C36 43 32 48 32 54Z\"/>", "hausbau": "<path d=\"M6 34L32 12L58 34\"/><path d=\"M12 30V54H52V30\"/><path d=\"M27 54V40H37V54\"/><path d=\"M12 43H27M37 43H52\"/>", "toepferei": "<path d=\"M19 16H45\"/><path d=\"M21 16C21 22 15 26 14 36C13 48 22 56 32 56C42 56 51 48 50 36C49 26 43 22 43 16\"/><path d=\"M16 37L21 42L26 37L31 42L36 37L41 42L46 37L49 40\"/>", "tierzucht": "<path d=\"M23 21Q12 22 9 11\"/><path d=\"M41 21Q52 22 55 11\"/><path d=\"M22 26L11 28\"/><path d=\"M42 26L53 28\"/><path d=\"M22 22Q32 18 42 22L44 40Q44 53 32 53Q20 53 20 40Z\"/><path d=\"M25 46Q32 51 39 46\"/><circle cx=\"26\" cy=\"32\" r=\"1.8\" fill=\"currentColor\"/><circle cx=\"38\" cy=\"32\" r=\"1.8\" fill=\"currentColor\"/><circle cx=\"29\" cy=\"45\" r=\"1.2\" fill=\"currentColor\"/><circle cx=\"35\" cy=\"45\" r=\"1.2\" fill=\"currentColor\"/>", "hakenpflug": "<path d=\"M8 16C22 18 34 32 44 50\"/><path d=\"M44 50C47 36 49 22 53 10\"/><path d=\"M44 50L50 57\"/><path d=\"M4 57H60\"/><path d=\"M10 62H20M26 62H38M44 62H54\"/>", "steinbohrung": "<path d=\"M28 16L54 20L56 32L36 34C32 30 28 22 28 16Z\"/><circle cx=\"42\" cy=\"26\" r=\"3\"/><path d=\"M10 58L42 26\"/><path d=\"M42 26L46 22\"/>", "muehle": "<path d=\"M6 46C6 40 20 38 32 38C46 38 58 40 58 46C58 54 46 56 32 56C18 56 6 54 6 46Z\"/><path d=\"M20 36C20 28 28 24 36 26C44 28 46 34 42 38C34 40 24 40 20 36Z\"/><circle cx=\"9\" cy=\"30\" r=\"1.6\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"24\" r=\"1.6\" fill=\"currentColor\"/><circle cx=\"8\" cy=\"22\" r=\"1.6\" fill=\"currentColor\"/><circle cx=\"50\" cy=\"32\" r=\"1.6\" fill=\"currentColor\"/><circle cx=\"55\" cy=\"27\" r=\"1.6\" fill=\"currentColor\"/>", "spinnen": "<path d=\"M20 16C16 10 24 6 28 9C31 4 39 5 40 10C46 9 48 16 43 19C41 24 33 24 31 21C26 24 19 21 20 16Z\"/><path d=\"M32 22V60\"/><path d=\"M22 47C22 41 42 41 42 47C42 53 22 53 22 47Z\"/><path d=\"M32 26C38 30 26 34 32 38\"/>", "webstuhl": "<path d=\"M8 10H56\"/><path d=\"M8 54H56\"/><path d=\"M14 6V58\"/><path d=\"M50 6V58\"/><path d=\"M21 10V54M28 10V54M35 10V54M42 10V54\"/><path d=\"M18 36H45M18 41H45M18 46H45\"/>"}, CATS = {"food": ["Nahrung erzeugen", "Mehr und sicherer Essen"], "store": ["Verarbeiten und Lagern", "Aus Ernte wird Vorrat"], "home": ["Wohnen", "Dauerhaft an einem Ort"], "cloth": ["Kleidung", "Von der Wolle zum Gewand"], "tool": ["Werkzeug", "Besser arbeiten"]}, CHAINS = [["Sesshaft werden", ["Ackerbau und Tierzucht", "Nahrung ist sicherer", "Menschen bleiben am Ort", "Hausbau", "Töpferei für Vorräte"]], ["Vom Korn zum Mehl", ["Hakenpflug (Rinder ziehen)", "mehr Getreide", "Mühle", "Mehl"]], ["Von der Wolle zum Gewand", ["Tierzucht", "Wolle", "Spinnen", "Webstuhl", "warme Kleidung"]], ["Besseres Werkzeug", ["Steinbohrung", "Klinge sitzt fest am Stiel", "Beil hält mehr aus"]]], TXT = {"kern": "Die Menschen wandeln sich von Jägern und Sammlern zu Bauern. Wer Felder und Tiere hat, bleibt an einem Ort. Er ist sesshaft.", "zeit": "Jungsteinzeit (Neolithikum), in Mitteleuropa ca. 5500 bis 2200 v. Chr.", "geschichte": "Ich pflüge mit dem Hakenpflug (5) und meinem Rind (4) das Feld (1). In der Mühle (7) mahle ich Mehl und lagere es im Tontopf (3) im festen Haus (2). Aus der Wolle spinne ich Fäden (8) und webe Kleidung (9). Mein Beil hat ein gebohrtes Loch (6), darum hält der Stiel."};
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var get = function (id) { return DECK.filter(function (d) { return d.id === id; })[0]; };
+  var catStyle = function (c) { return 'style="--cat:var(--' + c + ')"'; };
+  var li = function (arr) { return arr.map(function (x) { return '<li>' + x + '</li>'; }).join(''); };
+  function ico(n, s) {
+    return '<svg class="ico" viewBox="0 0 64 64" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[n] + '</svg>';
+  }
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  var allIds = DECK.map(function (d) { return d.id; });
+
+  /* Tabs */
+  function show(view) {
+    $$('.tab').forEach(function (b) { b.setAttribute('aria-selected', String(b.dataset.view === view)); });
+    $$('main > section').forEach(function (s) { s.hidden = s.id !== 'view-' + view; });
+    window.scrollTo(0, 0);
+  }
+  $$('.tab').forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.view); }); });
+
+  /* Braindump */
+  function renderBraindump() {
+    var story = TXT.geschichte.replace(/\((\d)\)/g, '<b class="nr">$1</b>');
+    var chains = CHAINS.map(function (c) {
+      return '<div class="chain-row"><div class="lbl">' + c[0] + '</div><ol class="chain">' +
+        c[1].map(function (s) { return '<li><span class="step">' + s + '</span></li>'; }).join('') + '</ol></div>';
+    }).join('');
+    var groups = Object.keys(CATS).map(function (k) {
+      var items = DECK.filter(function (d) { return d.cat === k; }).map(function (d) {
+        return '<article class="item" ' + catStyle(d.cat) + '>' + ico(d.icon, 56) +
+          '<div><div class="item-top"><span class="nr" title="Nummer auf dem Arbeitsblatt">' + d.n + '</span><h4>' + d.name + '</h4></div>' +
+          '<ul class="nutzen">' + li(d.nutzen) + '</ul><p class="bild">Bild: ' + d.bild + '</p></div></article>';
+      }).join('');
+      return '<div class="group" ' + catStyle(k) + '><h3><i class="dot"></i>' + CATS[k][0] + ' <span class="sub">' + CATS[k][1] + '</span></h3><div class="items">' + items + '</div></div>';
+    }).join('');
+    $('#view-braindump').innerHTML =
+      '<div class="kern"><div class="lbl">Die Kernidee</div><p class="big">' + TXT.kern + '</p><p class="zeit">' + TXT.zeit + '</p></div>' +
+      '<h2>So hängt alles zusammen</h2><p class="lead">Lies jede Reihe von links nach rechts. Eine Erfindung führt zur nächsten.</p>' +
+      '<div class="chains">' + chains + '</div>' +
+      '<h2>Alle 9 auf einen Blick</h2><p class="lead">Die Zahl im schwarzen Feld ist die Nummer auf dem Arbeitsblatt.</p>' + groups +
+      '<h2>Merkgeschichte</h2><p class="lead">Einmal laut vorlesen, dann sind alle neun im Kopf.</p><div class="story">' + story + '</div>' +
+      '<div class="actions"><button class="btn primary" type="button" data-go="karten">Karten üben</button><button class="btn" type="button" data-go="quiz">Quiz starten</button></div>' +
+      '<p class="foot">Die Stichworte stammen aus dem ausgefüllten Arbeitsblatt. Zeitangabe, Zusammenhänge und Merkgeschichte sind Ergänzungen zum Lernen.</p>';
+    $$('[data-go]').forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.go); }); });
+  }
+
+  /* Karten */
+  var order = allIds.slice(), idx = 0, flipped = false, shuffled = false, fillTimer = 0;
+  var card = $('#fcCard');
+  function fill() {
+    var d = get(order[idx]);
+    var front = $('#fcFront'), back = $('#fcBack');
+    front.setAttribute('style', '--cat:var(--' + d.cat + ')');
+    back.setAttribute('style', '--cat:var(--' + d.cat + ')');
+    front.innerHTML = '<div class="f-top"><span class="nr">' + d.n + '</span></div><div class="f-icon">' + ico(d.icon, 176) +
+      '</div><p class="f-hint">Was ist das? Was brachte es den Menschen?</p><p class="f-tap">Tippen zum Umdrehen</p>';
+    back.innerHTML = '<div class="f-top"><span class="nr">' + d.n + '</span><span class="chip"><i class="dot"></i>' + CATS[d.cat][0] + '</span></div>' +
+      '<h3 class="b-name">' + d.name + '</h3><div class="lbl">Verbesserung</div><ul class="nutzen">' + li(d.nutzen) + '</ul>' +
+      '<div class="lbl">Merkhilfe</div><p>' + d.merk + '</p><p class="bild">Bild: ' + d.bild + '</p>';
+    syncAria();
+  }
+  function syncAria() {
+    $('#fcFront').setAttribute('aria-hidden', String(flipped));
+    $('#fcBack').setAttribute('aria-hidden', String(!flipped));
+  }
+  function meta() {
+    $('#fcCount').textContent = 'Karte ' + (idx + 1) + ' von ' + order.length;
+    $$('#fcDots button').forEach(function (b, i) { b.setAttribute('aria-current', String(i === idx)); });
+  }
+  function buildDots() {
+    $('#fcDots').innerHTML = order.map(function (id, i) {
+      return '<button type="button" data-i="' + i + '" aria-label="Karte ' + get(id).n + ' ' + get(id).name + '">' + get(id).n + '</button>';
+    }).join('');
+    $$('#fcDots button').forEach(function (b) { b.addEventListener('click', function () { goTo(+b.dataset.i); }); });
+  }
+  function goTo(i) {
+    idx = (i + order.length) % order.length;
+    var was = flipped; flipped = false;
+    card.classList.remove('is-flipped');
+    clearTimeout(fillTimer);
+    if (was && !reduce) { fillTimer = setTimeout(fill, 260); } else { fill(); }
+    meta();
+  }
+  function flip() {
+    flipped = !flipped;
+    card.classList.toggle('is-flipped', flipped);
+    syncAria();
+  }
+  card.addEventListener('click', flip);
+  card.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+  $('#fcFlip').addEventListener('click', flip);
+  $('#fcPrev').addEventListener('click', function () { goTo(idx - 1); });
+  $('#fcNext').addEventListener('click', function () { goTo(idx + 1); });
+  $('#fcShuffle').addEventListener('click', function () {
+    shuffled = !shuffled;
+    order = shuffled ? shuffle(allIds) : allIds.slice();
+    $('#fcShuffle').textContent = shuffled ? 'Reihenfolge wie im Blatt' : 'Mischen';
+    buildDots(); goTo(0);
+  });
+  document.addEventListener('keydown', function (e) {
+    if ($('#view-karten').hidden || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowRight') goTo(idx + 1);
+    if (e.key === 'ArrowLeft') goTo(idx - 1);
+  });
+
+  /* Quiz */
+  var quiz = { mode: 'bild', queue: [], pos: 0, known: [], missed: [], revealed: false };
+  function startQuiz(ids) {
+    quiz.queue = shuffle(ids); quiz.pos = 0; quiz.known = []; quiz.missed = []; quiz.revealed = false;
+    renderQuiz();
+  }
+  function renderQuiz() {
+    var box = $('#quizBox'), total = quiz.queue.length;
+    $('#qProgress').textContent = quiz.pos < total ? 'Frage ' + (quiz.pos + 1) + ' von ' + total : 'Fertig';
+    $('#qScore').textContent = quiz.known.length + ' gewusst';
+    $('#qBar').style.width = Math.round(quiz.pos / total * 100) + '%';
+    if (quiz.pos >= total) {
+      var missed = quiz.missed.map(get);
+      box.innerHTML = '<div class="qcard summary"><h3>' + quiz.known.length + ' von ' + total + ' gewusst</h3><p>' +
+        (missed.length ? 'Diese Karten üben wir noch einmal:' : 'Alle richtig, sehr gut!') + '</p>' +
+        (missed.length ? '<ul class="missed">' + missed.map(function (d) { return '<li ' + catStyle(d.cat) + '>' + ico(d.icon, 40) + '<span>' + d.name + '</span></li>'; }).join('') + '</ul>' : '') +
+        '<div class="ctrl2' + (missed.length ? '' : ' one') + '">' + (missed.length ? '<button class="btn primary" type="button" data-act="retry">Fehler wiederholen</button>' : '') +
+        '<button class="btn" type="button" data-act="restart">Alles neu mischen</button></div></div>';
+      return;
+    }
+    var d = get(quiz.queue[quiz.pos]), q, a;
+    if (quiz.mode === 'bild') {
+      q = '<div class="q-icon">' + ico(d.icon, 150) + '</div><p class="q-prompt">Wie heißt die Erfindung? Was war die Verbesserung?</p>';
+      a = '<h3>' + d.name + '</h3><ul class="q-list">' + li(d.nutzen) + '</ul><p class="bild">Merkhilfe: ' + d.merk + '</p>';
+    } else {
+      q = '<ul class="q-list">' + li(d.nutzen) + '</ul><p class="q-prompt">Welche Erfindung ist das?</p>';
+      a = '<div class="row">' + ico(d.icon, 64) + '<h3>' + d.name + '</h3></div><p class="bild">Bild: ' + d.bild + '. ' + d.merk + '</p>';
+    }
+    box.innerHTML = '<div class="qcard" ' + catStyle(d.cat) + '>' + q +
+      (quiz.revealed
+        ? '<div class="answer">' + a + '</div><div class="ctrl2"><button class="btn bad" type="button" data-act="miss">Nochmal üben</button><button class="btn good" type="button" data-act="know">Wusste ich</button></div>'
+        : '<div class="ctrl2 one"><button class="btn primary" type="button" data-act="reveal">Antwort zeigen</button></div>') + '</div>';
+  }
+  $('#quizBox').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var act = b.dataset.act;
+    if (act === 'reveal') { quiz.revealed = true; renderQuiz(); var c = $('#quizBox .ctrl2'); if (c && c.scrollIntoView) c.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }
+    else if (act === 'know' || act === 'miss') {
+      (act === 'know' ? quiz.known : quiz.missed).push(quiz.queue[quiz.pos]);
+      quiz.pos++; quiz.revealed = false; renderQuiz();
+    }
+    else if (act === 'retry') { startQuiz(quiz.missed.slice()); }
+    else if (act === 'restart') { startQuiz(allIds); }
+  });
+  $$('.segbtn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      quiz.mode = b.dataset.mode;
+      $$('.segbtn').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      startQuiz(allIds);
+    });
+  });
+
+  renderBraindump();
+  buildDots();
+  fill();
+  meta();
+  startQuiz(allIds);
+})();
+</script>
+
+</body></html>
